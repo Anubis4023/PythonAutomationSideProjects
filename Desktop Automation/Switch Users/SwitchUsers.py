@@ -62,5 +62,3 @@ mouse.click()
 #Close the Discord window
 mouse.move(1904, 12, True, 0)
 mouse.click(button='left')
-
-#TODO: #1 Before closing discord, change the mic settings from RTX voice to XIBERIA
