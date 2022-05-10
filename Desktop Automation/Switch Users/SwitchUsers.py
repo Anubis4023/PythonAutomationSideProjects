@@ -19,3 +19,6 @@ mouse.click(button='left')
 mouse.move(1426, 227, True, 0)
 time.sleep(1)
 mouse.click(button='left')
+
+
+#Open discord 
