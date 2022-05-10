@@ -18,7 +18,7 @@ mouse.move(1380, 822, True, 0)
 time.sleep(1)
 mouse.click(button='left')
 #Close the window
-mouse.move(1426, 227, True, 0)
+mouse.move(1430, 227, True, 1)
 time.sleep(1)
 mouse.click(button='left')
 
@@ -39,3 +39,5 @@ mouse.click(button='left')
 #Move and click on the close window button
 mouse.move(1904, 12, True, 0)
 mouse.click(button='left')
+
+quit()
