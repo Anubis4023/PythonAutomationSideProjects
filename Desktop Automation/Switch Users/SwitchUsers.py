@@ -8,12 +8,14 @@ openMouse = Application(backend="uia").start('C:\Program Files (x86)\Glorious Mo
 
 #Move mouse to profiles button
 mouse.move(582, 737, True, 0)
+time.sleep(1)
 mouse.click(button='left')
 #Select my profile
 mouse.move(582, 767, True, 0)
 mouse.click(button='left')
 #Apply changes
 mouse.move(1380, 822, True, 0)
+time.sleep(1)
 mouse.click(button='left')
 #Close the window
 mouse.move(1426, 227, True, 0)
