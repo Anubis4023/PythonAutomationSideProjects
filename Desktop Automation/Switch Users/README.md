@@ -4,7 +4,7 @@ Desktop automation that:
 - Change mouse sensitivity from brother's settings to mine (Glorious Model O Software application)
 
 # Ideas for future updates
-- Close all open applications, besides Discord
+- Close all open applications that brother left open
 - Open Google Chrome and select my google profile user
 - Close applications running in the background
 - Close extra desktops that are open
