@@ -59,6 +59,8 @@ mouse.click()
 mouse.move(857, 368, True, 0)
 mouse.click()
 
+#TODO: #3 Close the settings window before closing Discord
+
 #Close the Discord window
 mouse.move(1904, 12, True, 0)
 mouse.click(button='left')
