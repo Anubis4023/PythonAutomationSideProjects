@@ -65,7 +65,7 @@ mouse.move(857, 368, True, 0)
 mouse.click()
 
 #TODO: #3 Close the settings window before closing Discord
-#TODO: Automate closing the background process of Discord
+#TODO: #4 Automate closing the background process of Discord
 
 #Close the Discord window and the background process
 mouse.move(1904, 12, True, 1)
