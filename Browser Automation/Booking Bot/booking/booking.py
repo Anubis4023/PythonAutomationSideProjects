@@ -42,11 +42,20 @@ class Booking(webdriver.Chrome):
         end_date_element = self.find_element(By.CSS_SELECTOR, f'td[data-date="{end_date}"]')
         end_date_element.click()
 
-    # def select_adults(self, numAdults=None):
-    #     while True:
-    #         numAdults_element = self.find_element(By.CSS_SELECTOR, )
-    #         numAdults_element.click()
-    #         if True:
-    #             #something
-    #             break
+    def select_adults(self, numAdults=None):
+        guestsMenu = self.find_element(By.ID, 'xp__guests__toggle')
+        guestsMenu.click()
+
+        numAdults_element = self.find_element(By.ID, 'group_adults')
+        numAdultsText = numAdults_element.get_attribute('value')
+        while int(numAdultsText) != 1:
+            subAdults = self.find_element(By.CSS_SELECTOR, 'button[aria-label="Decrease number of Adults"]')
+            subAdults.click()
+            numAdultsText = numAdults_element.get_attribute('value')
+
+        while int(numAdultsText) != numAdults:
+            addAdults = self.find_element(By.CSS_SELECTOR, 'button[aria-label="Increase number of Adults"]')
+            addAdults.click()
+            numAdultsText = numAdults_element.get_attribute('value')
+
 
