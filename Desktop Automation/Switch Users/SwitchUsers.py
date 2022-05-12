@@ -99,3 +99,5 @@ if Discord.exists():
 #     mouse.move(50, -15, False, 0) #Move to exit/close button
 #     mouse.click() #Click on exit/close button
 
+
+#TODO: #5 Open Chrome window and select my user profile
