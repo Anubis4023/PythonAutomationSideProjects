@@ -53,9 +53,8 @@ class Booking(webdriver.Chrome):
             subAdults.click()
             numAdultsText = numAdults_element.get_attribute('value')
 
-        while int(numAdultsText) != numAdults:
-            addAdults = self.find_element(By.CSS_SELECTOR, 'button[aria-label="Increase number of Adults"]')
+        addAdults = self.find_element(By.CSS_SELECTOR, 'button[aria-label="Increase number of Adults"]')
+        for _ in range (numAdults - 1):
             addAdults.click()
-            numAdultsText = numAdults_element.get_attribute('value')
 
 

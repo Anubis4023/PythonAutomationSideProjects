@@ -6,5 +6,5 @@ with Booking(teardown=False) as bot:
     bot.select_destination()
     bot.select_start_date('2022-05-15')
     bot.select_end_date('2022-05-25')
-    bot.select_adults(6)
+    bot.select_adults(10)
     print("Exiting...")
