@@ -19,14 +19,19 @@ mouse.click(button='left')
 mouse.move(1380, 822, True, 0)
 time.sleep(1)
 mouse.click(button='left')
+#Wait for changes to be applied
+time.sleep(2)
 #Close the window
-mouse.move(1430, 227, True, 0)
-time.sleep(1)
+mouse.move(1435, 227, True, 0)
+#time.sleep(1)
 mouse.click(button='left')
 
-#Open discord and connect to the window that opens
+#Open discord
 app = Application(backend="uia").start(r"C:\Users\pacow\AppData\Local\DiscordPTB\app-1.0.1013\DiscordPTB.exe")#.connect(title = 'Discord', timeout=10)
 #discord.window(best_match='Discord').print_control_identifiers()
+
+#wait for Discord to finish loading page
+time.sleep(5)
 
 #DISCORD
 #Open profiles list
@@ -60,7 +65,8 @@ mouse.move(857, 368, True, 0)
 mouse.click()
 
 #TODO: #3 Close the settings window before closing Discord
+#TODO: Automate closing the background process of Discord
 
-#Close the Discord window
-mouse.move(1904, 12, True, 0)
+#Close the Discord window and the background process
+mouse.move(1904, 12, True, 1)
 mouse.click(button='left')
