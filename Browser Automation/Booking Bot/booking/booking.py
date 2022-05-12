@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import os
 import booking.constants as const
+import time
 
 
 class Booking(webdriver.Chrome):
@@ -16,6 +17,7 @@ class Booking(webdriver.Chrome):
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if self.teardown:
+            time.sleep(5)
             self.quit()
 
     def select_currency(self, currency=None):
@@ -24,3 +26,27 @@ class Booking(webdriver.Chrome):
 
         select_currency = self.find_element(By.CSS_SELECTOR, f'a[data-modal-header-async-url-param*="selected_currency={currency}"]')
         select_currency.click()
+
+    def select_destination(self, destination=None):
+        destination_element = self.find_element(By.ID, 'ss')
+        destination_element.clear()
+        destination_element.send_keys('Las Vegas')
+        destList_element = self.find_element(By.CSS_SELECTOR, 'li[data-i="1"]')
+        destList_element.click()
+
+    def select_start_date(self, start_date=None):
+        start_date_element = self.find_element(By.CSS_SELECTOR, f'td[data-date="{start_date}"')
+        start_date_element.click()
+
+    def select_end_date(self, end_date=None):
+        end_date_element = self.find_element(By.CSS_SELECTOR, f'td[data-date="{end_date}"]')
+        end_date_element.click()
+
+    # def select_adults(self, numAdults=None):
+    #     while True:
+    #         numAdults_element = self.find_element(By.CSS_SELECTOR, )
+    #         numAdults_element.click()
+    #         if True:
+    #             #something
+    #             break
+
