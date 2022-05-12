@@ -4,7 +4,7 @@ import time
 
 
 #Open the mouse settings application and connect to the window that opens
-openMouse = Application(backend="uia").start('C:\Program Files (x86)\Glorious Model O Software\OemDrv.exe')#.connect(title='Glorious Model O Software', timeout=3)
+openMouse = Application(backend="uia").start('C:\Program Files (x86)\Glorious Model O Software\OemDrv.exe')
 #openMouse.GloriousModelOSoftware.print_control_identifiers()
 
 #GLORIOUS O MODEL
@@ -27,7 +27,7 @@ mouse.move(1435, 227, True, 0)
 mouse.click(button='left')
 
 #Open discord
-app = Application(backend="uia").start(r"C:\Users\pacow\AppData\Local\DiscordPTB\app-1.0.1013\DiscordPTB.exe")#.connect(title = 'Discord', timeout=10)
+openDiscord = Application(backend="uia").start(r"C:\Users\pacow\AppData\Local\DiscordPTB\app-1.0.1013\DiscordPTB.exe")
 #discord.window(best_match='Discord').print_control_identifiers()
 
 #wait for Discord to finish loading page
@@ -88,7 +88,7 @@ if Discord.exists():
     mouse.move(50, -15, False, 0)
     mouse.click()
 
-#Format to add more background processes to close
+#FORMAT to add more background processes to close
 # time.sleep(1)
 # hidden_tray_button.click()
 
@@ -96,8 +96,13 @@ if Discord.exists():
 # if Name.exists():
 #     Name.wrapper_object().right_click_input() #Open submenu
 #     time.sleep(1)
-#     mouse.move(50, -15, False, 0) #Move to exit/close button
+#     mouse.move(50, -15, False, 0) #Move to exit/close button, need to find coordinates through simple testing and mouse.get_position
 #     mouse.click() #Click on exit/close button
 
 
 #TODO: #5 Open Chrome window and select my user profile
+openChrome = Application(backend="uia").start('C:\Program Files\Google\Chrome\Application\chrome.exe')
+time.sleep(1)
+mouse.move(1045, 485, True, 0)
+mouse.click()
+
