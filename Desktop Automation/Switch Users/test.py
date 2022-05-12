@@ -9,10 +9,6 @@ sys_tray = openVal.window(class_name="Shell_TrayWnd")
 hidden_tray_button = sys_tray.child_window(title="Notification Chevron").wrapper_object()
 hidden_tray_button.click_input()
 
-#list_box = Application(backend="uia").connect(class_name="NotificationOverflow")
-
-#time.sleep(3)
-#print(openVal.windows())'
 app = Application().connect(best_match="NotificationOverflow")
 
 list_box = Application(backend="uia").connect(class_name="NotifyIconOverflowWindow")
@@ -26,7 +22,7 @@ if Steam.exists():
     mouse.click()
 
 time.sleep(1)
-hidden_tray_button.click_input()
+hidden_tray_button.click()
 
 Discord = list_box_win.child_window(title="DiscordPtb")
 if Discord.exists():
