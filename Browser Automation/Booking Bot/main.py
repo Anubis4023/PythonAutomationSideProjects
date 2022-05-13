@@ -1,6 +1,6 @@
 from booking.booking import Booking
 
-with Booking(teardown=True) as bot:
+with Booking(teardown=False) as bot:
     bot.land_first_page()
     #bot.select_currency(currency='MXN')
     bot.select_destination()

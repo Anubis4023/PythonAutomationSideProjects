@@ -9,12 +9,9 @@ class BookingFiltration:
     def apply_star_rating(self, *stars):
         star_filtration = self.driver.find_element(By.CSS_SELECTOR, 'div[data-filters-group="class"]')
         star_filtration_children = star_filtration.find_elements(By.CSS_SELECTOR, '*')
-        for child in star_filtration_children:
-            print(child.get_attribute('innerHTML'))
-            print("\n")
-
         
         for star in stars:
+            #print(f'Looking for {star} stars')
             for child_filter in star_filtration_children:
-                if str(child_filter.get_attribute('innerHTMl')).strip() == f'{star} stars':
-                    print("found")
+                if ((str(child_filter.get_attribute('innerHTML')).strip() == '1 star') and star == 1) or (str(child_filter.get_attribute('innerHTML')).strip() == f'{star} stars'):
+                    child_filter.click()
