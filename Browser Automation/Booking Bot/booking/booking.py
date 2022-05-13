@@ -1,15 +1,20 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from booking.filtration import BookingFiltration
+from booking.report import BookingReport
 import os
 import booking.constants as const
 import time
 
 
 class Booking(webdriver.Chrome):
-    def __init__(self, teardown=False):
+    def __init__(self, driver_path=r";C:\Users\pacow\Desktop\Selenium Drivers", teardown=False):
+        self.driver_path = driver_path
         self.teardown = teardown
-        super(Booking, self).__init__()
+        os.environ['PATH'] += self.driver_path
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        super(Booking, self).__init__(options=options)
         self.implicitly_wait(15) #Find element methods will wait x seconds
         self.maximize_window()
 
@@ -67,4 +72,8 @@ class Booking(webdriver.Chrome):
         #filtration.apply_star_rating(1,3,5)
         filtration.sort_price_lowest_first()
     
+    def report (self):
+        hotels = self.find_element(By.ID, 'search_results_table')
+        results = BookingReport(hotels)
+        results.get_titles()
 

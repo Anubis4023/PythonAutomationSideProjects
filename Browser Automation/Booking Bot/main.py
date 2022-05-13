@@ -9,4 +9,6 @@ with Booking(teardown=False) as bot:
     #bot.select_adults(5)
     bot.search()
     bot.apply_filtrations()
+    bot.refresh()
+    bot.report()
     print("Exiting...")
