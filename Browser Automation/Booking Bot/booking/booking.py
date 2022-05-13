@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from booking.filtration import BookingFiltration
 import os
 import booking.constants as const
 import time
@@ -17,7 +18,7 @@ class Booking(webdriver.Chrome):
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if self.teardown:
-            time.sleep(5)
+            #time.sleep(5)
             self.quit()
 
     def select_currency(self, currency=None):
@@ -60,4 +61,8 @@ class Booking(webdriver.Chrome):
     def search(self):
         searchButton = self.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
         searchButton.click()
+
+    def apply_filtrations (self):
+        filtration = BookingFiltration(driver=self)
+        filtration.apply_star_rating(1)
 
