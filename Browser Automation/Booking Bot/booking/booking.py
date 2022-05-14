@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from booking.filtration import BookingFiltration
 from booking.report import BookingReport
+from prettytable import PrettyTable
 import os
 import booking.constants as const
 import time
@@ -12,6 +13,7 @@ class Booking(webdriver.Chrome):
         self.driver_path = driver_path
         self.teardown = teardown
         os.environ['PATH'] += self.driver_path
+        os.environ['PATH'] += r";C:\Users\pacow\OneDrive\Desktop\Selenium Drivers"
         options = webdriver.ChromeOptions()
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
         super(Booking, self).__init__(options=options)
@@ -75,5 +77,8 @@ class Booking(webdriver.Chrome):
     def report (self):
         hotels = self.find_element(By.ID, 'search_results_table')
         results = BookingReport(hotels)
-        results.get_titles()
+        results.get_attributes()
+        table = PrettyTable(field_names=["Hotel Name", "Hotel Score", "Hotel Price"])
+        table.add_rows(results.get_attributes())
+        print(table)
 
