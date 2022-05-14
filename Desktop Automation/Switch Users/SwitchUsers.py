@@ -9,20 +9,20 @@ openMouse = Application(backend="uia").start('C:\Program Files (x86)\Glorious Mo
 
 #GLORIOUS O MODEL
 #Move mouse to profiles button
-mouse.move(582, 737, True, 0)
-time.sleep(1)
+mouse.move(582, 737, True, 1)
+#time.sleep(1)
 mouse.click(button='left')
 #Select my profile
-mouse.move(582, 767, True, 0)
+mouse.move(582, 767, True, 1)
 mouse.click(button='left')
 #Apply changes
-mouse.move(1380, 822, True, 0)
-time.sleep(1)
+mouse.move(1380, 822, True, 1)
+#time.sleep(1)
 mouse.click(button='left')
 #Wait for changes to be applied
-time.sleep(2)
+#time.sleep(2)
 #Close the window
-mouse.move(1435, 227, True, 0)
+mouse.move(1435, 227, True, 1)
 #time.sleep(1)
 mouse.click(button='left')
 
@@ -35,40 +35,41 @@ time.sleep(5)
 
 #DISCORD
 #Open profiles list
-mouse.move(109, 1007, True, 0)
+mouse.move(109, 1007, True, 1)
 mouse.click(button='left')
 #Click on 'Switch Accounts'
-mouse.move(175, 947, True, 0)
+mouse.move(175, 947, True, 1)
 mouse.click(button='left')
 #Let list of profiles load
-time.sleep(1)
+#time.sleep(1)
 #Switch account to my profile
-mouse.move(1068, 503, True, 0)
+mouse.move(1068, 503, True, 1)
 mouse.click(button='left')
 #Let my profile load for discord
 time.sleep(2)
 
 #Move mouse to switch mic settings
 #Click on settings
-mouse.move(314, 1012, True, 0)
+mouse.move(314, 1012, True, 1)
 mouse.click()
 #Let settings load
-time.sleep(1)
+#time.sleep(1)
 #Click on 'Voice & Video'
-mouse.move(477, 681, True, 0)
+mouse.move(477, 681, True, 1)
 mouse.click()
 #Open list of input devices
-mouse.move(966, 184, True, 0)
+mouse.move(966, 184, True, 1)
 mouse.click()
 #Select XIBERIA
-mouse.move(857, 368, True, 0)
+mouse.move(857, 368, True, 1)
 mouse.click()
 #Close settings window
-mouse.move(1471, 109, True, 0)
+mouse.move(1471, 109, True, 1)
 mouse.click()
 #Close the Discord window
-mouse.move(1904, 12, True, 0)
+mouse.move(1904, 12, True, 1)
 mouse.click()
+
 
 #Close Discord background process
 app2 = Application(backend="uia").connect(path="explorer.exe")
@@ -85,7 +86,7 @@ Discord = list_box_win.child_window(title="DiscordPtb")
 if Discord.exists():
     Discord.wrapper_object().right_click_input()
     time.sleep(1)
-    mouse.move(50, -15, False, 0)
+    mouse.move(50, -15, False, 1)
     mouse.click()
 
 #FORMAT to add more background processes to close
@@ -102,7 +103,7 @@ if Discord.exists():
 
 #TODO: #5 Open Chrome window and select my user profile
 openChrome = Application(backend="uia").start('C:\Program Files\Google\Chrome\Application\chrome.exe')
-time.sleep(1)
-mouse.move(1045, 485, True, 0)
+#time.sleep(1)
+mouse.move(1045, 485, True, 1)
 mouse.click()
 
