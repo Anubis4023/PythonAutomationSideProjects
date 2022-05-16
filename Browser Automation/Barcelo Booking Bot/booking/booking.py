@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import StaleElementReferenceException
 
 from booking.report import BookingReport
 import os
@@ -39,14 +40,23 @@ class Booking(webdriver.Chrome):
         
         location = self.find_element(By.CSS_SELECTOR, 'input[name="Quintana Roo"]')
         location.click()
-        time.sleep(1) #Let page load after filter
+        #time.sleep(1) #Let page load after filter
 
     def filter_brand(self):
         self.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.HOME)
-        time.sleep(2)
+        #time.sleep(10)
 
         brands = self.find_element(By.CSS_SELECTOR, 'div[data-dimension="hotel_brand"]')
         brands = brands.find_element(By.CSS_SELECTOR, 'span[class="accordion-toggle mod--icon-right"]')
+
+        try:
+            loading = self.find_element(By.CSS_SELECTOR, 'div[class="c-loading c-loading-JS bhg-loading mod--loading-active common-transition mod--fullscreen"]')
+            while loading.is_displayed():
+                time.sleep(1)
+                print("Waited one second for loading screen")
+        except:
+            print("Loading screen done!")
+
         brands.click()
 
         barcelo = self.find_element(By.CSS_SELECTOR, 'input[name="Barceló"]')
@@ -61,6 +71,7 @@ class Booking(webdriver.Chrome):
         sort_cheapest.click()
 
         sort.click()
+        time.sleep(1) #Let page load after filter
 
     def report(self):
         hotels = self.find_element(By.CSS_SELECTOR, 'div[class="result__list result__list-JS"]')
