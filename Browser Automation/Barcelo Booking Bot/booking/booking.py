@@ -1,6 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+from booking.report import BookingReport
 import os
 import time
 
@@ -21,7 +25,7 @@ class Booking(webdriver.Chrome):
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if self.teardown:
-            time.sleep(10)
+            time.sleep(3)
             self.quit()
 
     def accept_cookies(self):
@@ -35,6 +39,7 @@ class Booking(webdriver.Chrome):
         
         location = self.find_element(By.CSS_SELECTOR, 'input[name="Quintana Roo"]')
         location.click()
+        time.sleep(1) #Let page load after filter
 
     def filter_brand(self):
         self.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.HOME)
@@ -46,9 +51,23 @@ class Booking(webdriver.Chrome):
 
         barcelo = self.find_element(By.CSS_SELECTOR, 'input[name="Barceló"]')
         barcelo.click()
+        time.sleep(1) #Let page load after filter
 
+    def sort_cheapest(self):
+        sort = self.find_element(By.ID, 'search-order')
+        sort.click()
 
+        sort_cheapest = self.find_element(By.CSS_SELECTOR, 'option[value="info.hotelLocalLowPrice"]')
+        sort_cheapest.click()
 
+        sort.click()
 
-        #TODO: 
+    def report(self):
+        hotels = self.find_element(By.CSS_SELECTOR, 'div[class="result__list result__list-JS"]')
+        results = BookingReport(self, hotels)
+        results.search()
+        
+        
+
+    
 
