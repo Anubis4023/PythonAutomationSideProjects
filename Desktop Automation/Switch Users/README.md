@@ -9,4 +9,4 @@ Desktop automation that:
 - Close all open applications that brother left open
 - Open Google Chrome and select my google profile user
 - Close extra desktops that are open
-
+- Add input for myself to choose options 1, 2, etc. to do the discord automation only vs mouse settings automation only vs etc.
