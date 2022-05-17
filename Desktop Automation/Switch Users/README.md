@@ -10,3 +10,4 @@ Desktop automation that:
 - Open Google Chrome and select my google profile user
 - Close extra desktops that are open
 - Add input for myself to choose options 1, 2, etc. to do the discord automation only vs mouse settings automation only vs etc.
+  - Add ability to combine different options together. 1 & 2 or 1 & 3, etc
