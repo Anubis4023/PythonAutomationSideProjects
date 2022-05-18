@@ -8,8 +8,21 @@ class BookingFilter:
         self.driver = driver
 
     def reapply_filters(self): #Reset the filters after going back to the first page
+        self.sort_cheapest(option=2)
+        self.choose_location(option=2)
+        self.filter_brand(option=2)
+        self.clear_dates()
+
+    def clear_dates(self):
+        buttonWorks = False
+        while not buttonWorks:
+            try:
+                clear = self.driver.find_element(By.CSS_SELECTOR, 'button[class="c-delete-dates delete-dates-JS"]')
+                clear.click()
+                buttonWorks = True
+            except:
+                buttonWorks = False
         
-        pass
     
     def sort_cheapest(self, option=1): #Option one is for the start of the script, option two is for when hotels are being selected
         sort = self.driver.find_element(By.ID, 'search-order')
@@ -28,7 +41,6 @@ class BookingFilter:
 
     def filter_brand(self, option=1):
         self.driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.HOME)
-        #time.sleep(10)
 
         brands = self.driver.find_element(By.CSS_SELECTOR, 'div[data-dimension="hotel_brand"]')
         brands = brands.find_element(By.CSS_SELECTOR, 'span[class="accordion-toggle mod--icon-right"]')
@@ -37,9 +49,7 @@ class BookingFilter:
             loading = self.driver.find_element(By.CSS_SELECTOR, 'div[class="c-loading c-loading-JS bhg-loading mod--loading-active common-transition mod--fullscreen"]')
             while loading.is_displayed():
                 time.sleep(1)
-                #print("Waited one second for loading screen")
         except:
-            #print("Loading screen done!")
             pass
 
         brands.click()
