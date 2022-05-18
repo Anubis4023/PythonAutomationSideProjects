@@ -9,6 +9,8 @@ from booking.report import BookingReport
 import os
 import time
 
+#TODO: #8 make a filter class with filter functions and replace them in booking.py and refilter when a price for a hotel is retrieved in report.py
+
 class Booking(webdriver.Chrome):
     def __init__(self, driver_path=r";C:\Users\pacow\Desktop\Selenium Drivers", teardown=False):
         self.driver_path = driver_path
@@ -53,9 +55,10 @@ class Booking(webdriver.Chrome):
             loading = self.find_element(By.CSS_SELECTOR, 'div[class="c-loading c-loading-JS bhg-loading mod--loading-active common-transition mod--fullscreen"]')
             while loading.is_displayed():
                 time.sleep(1)
-                print("Waited one second for loading screen")
+                #print("Waited one second for loading screen")
         except:
-            print("Loading screen done!")
+            #print("Loading screen done!")
+            pass
 
         brands.click()
 

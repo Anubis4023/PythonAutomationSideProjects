@@ -19,12 +19,18 @@ class BookingReport:
     def search(self): #self.hotels has a list of the hotels, go to each hotel and find the price for each person
                       #in the cheapest room. Later update to also find a Volaris plane ticket 
         print(self.findPrice(self.hotels[5]))
-        
+        self.driver.close()
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        self.driver.back()
+        self.refilter()
 
         # for hotel in self.hotels: #for each hotel, click on booking, get redirected, get price, close tab, 
         #                           #go back to first tab, apply filters again (make it one function), 
         #                           #and continue process for every hotel using findPrice on each one
         #     pass
+    
+    def refilter(self):
+        
 
     def findPrice(self, hotel:WebElement): #working with each invidiual hotel passed into hotel in the main screen
         self.selectCheapestDays(hotel)
@@ -177,9 +183,9 @@ class BookingReport:
             loading = self.driver.find_element(By.CSS_SELECTOR, 'div[class="c-loading c-loading-JS bhg-loading mod--loading-active common-transition mod--fullscreen"]')
             while loading.is_displayed():
                 time.sleep(1)
-                print("Waited one second for loading screen")
+                #print("Waited one second for loading screen")
         except:
-            print("Loading screen done! Exception caught and handled")
+            pass
 
         hotelBooking.click()
 
