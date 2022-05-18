@@ -9,14 +9,17 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 
 class BookingReport:
-    def __init__(self, driver:WebDriver, hotels_element:WebElement):
+    def __init__(self, driver:WebDriver, hotels_element:WebElement, adults, rooms):
         self.driver = driver
         self.hotels_element = hotels_element
+        self.party = adults
+        self.rooms = rooms
         self.hotels = self.hotels_element.find_elements(By.CSS_SELECTOR, 'div[class="result__list-item"]')
 
     def search(self): #self.hotels has a list of the hotels, go to each hotel and find the price for each person
                       #in the cheapest room. Later update to also find a Volaris plane ticket 
-        self.findPrice(self.hotels[0])
+        print(self.findPrice(self.hotels[5]))
+        
 
         # for hotel in self.hotels: #for each hotel, click on booking, get redirected, get price, close tab, 
         #                           #go back to first tab, apply filters again (make it one function), 
@@ -25,22 +28,42 @@ class BookingReport:
 
     def findPrice(self, hotel:WebElement): #working with each invidiual hotel passed into hotel in the main screen
         self.selectCheapestDays(hotel)
-        self.selectOccupancy(4, 4)
+        self.selectOccupancy()
         self.signIn(False)
-        self.selectRooms(4)
+        self.selectRooms()
+        return self.pullPrice()
 
-    def selectRooms(self, numRooms):
+    def pullPrice(self):
+        totalTextDraft = self.driver.find_element(By.CSS_SELECTOR, 'div[class="price-summary_price"]').find_element(By.CSS_SELECTOR, 'span').get_attribute('innerHTML')
+        totalText = totalTextDraft[1:] 
+        totalText = totalText.replace(",", "")
+        total = float(totalText)
+
+        Prices = [] #List of prices in the format: Total price, individual total price, individual price per night
+        Prices.append(total)
+        Prices.append(total/self.party)
+        Prices.append(total/self.party/self.rooms)
+        return Prices
+
+    def selectRooms(self):
+        numRooms = self.rooms
         for i in range(numRooms):
             rooms_element = self.driver.find_element(By.CSS_SELECTOR, 'div[class="thumb-cards_products"]') #This part is not necessary to finding the cheapest room, but is necessary if I want the option to pick cheapest vs more expensive options
                                                                         #rooms_element is the overall element that holds the list of rooms
             cheapest_room = rooms_element.find_element(By.ID, 'auto-parent-card-0')
             book_button = cheapest_room.find_element(By.CSS_SELECTOR, 'button[class="btn button_btn button_primary button_sm"]')
-            try: #First button click fails, but second one works
-                book_button.click()
-                print("Button click worked with no error")
-            except:
-                book_button.click()
-                print("Button click caused an error so had to do it twice")
+
+            buttonLoaded = False
+            while not buttonLoaded:
+                try: #First button click fails, but second one works
+                    book_button.click()
+                    buttonLoaded = True
+                    #print("Button click worked with no error")
+                except:
+                    buttonLoaded = False
+                    #print("Button failed, trying again")
+                    #print("Button click caused an error so had to do it twice")
+
             #time.sleep(2) #Wait some time for the page to update before clicking the continue button
             buttonLoaded = False
             while not buttonLoaded:
@@ -69,8 +92,9 @@ class BookingReport:
             close_button.click()
 
 
-    def selectOccupancy(self, adults, rooms):
-        #("")
+    def selectOccupancy(self):
+        adults = self.party
+        rooms = self.rooms
 
         #Press button to open list to select number of adults and rooms
         adultsList = self.driver.find_element(By.ID, 'rooms-fb')

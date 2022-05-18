@@ -73,9 +73,9 @@ class Booking(webdriver.Chrome):
         sort.click()
         time.sleep(1) #Let page load after filter
 
-    def report(self):
+    def report(self, adults, rooms):
         hotels = self.find_element(By.CSS_SELECTOR, 'div[class="result__list result__list-JS"]')
-        results = BookingReport(self, hotels)
+        results = BookingReport(self, hotels, adults, rooms)
         results.search()
         
         
