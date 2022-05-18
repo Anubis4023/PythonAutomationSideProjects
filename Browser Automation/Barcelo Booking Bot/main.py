@@ -10,5 +10,6 @@ with Booking(teardown=False) as bot:
     bot.filter_brand()
     #time.sleep(3) #Let page load after filters
     bot.report()
+    #time.sleep(5)
     
 
