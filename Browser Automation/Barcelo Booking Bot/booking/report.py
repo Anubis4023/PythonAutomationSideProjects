@@ -30,7 +30,7 @@ class BookingReport:
         #     pass
     
     def refilter(self):
-        
+        pass
 
     def findPrice(self, hotel:WebElement): #working with each invidiual hotel passed into hotel in the main screen
         self.selectCheapestDays(hotel)
