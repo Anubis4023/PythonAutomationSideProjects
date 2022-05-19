@@ -13,7 +13,7 @@ mouse.move(582, 737, True, 1)
 #time.sleep(1)
 mouse.click(button='left')
 #Select my profile
-mouse.move(582, 767, True, 1)
+mouse.move(582, 767, True, 0)
 mouse.click(button='left')
 #Apply changes
 mouse.move(1380, 822, True, 1)
@@ -64,10 +64,10 @@ mouse.click()
 mouse.move(881, 469, True, 1)
 mouse.click()
 #Close settings window
-mouse.move(1471, 109, True, 1)
+mouse.move(1471, 109, True, 0)
 mouse.click()
 #Close the Discord window
-mouse.move(1904, 12, True, 1)
+mouse.move(1904, 12, True, 0)
 mouse.click()
 
 
@@ -89,6 +89,19 @@ if Discord.exists():
     mouse.move(50, -15, False, 1)
     mouse.click()
 
+#time.sleep(1)
+#hidden_tray_button.click()
+#time.sleep(3)
+#print("Trying again")
+#hidden_tray_button.click()
+
+Steam = list_box_win.child_window(title="Steam")
+if Steam.exists():
+    Steam.wrapper_object().right_click_input() #Open submenu
+    time.sleep(1)
+    mouse.move(-220, -15, False, 0) #Move to exit/close button, need to find coordinates through simple testing and mouse.get_position
+    mouse.click() #Click on exit/close button
+
 #FORMAT to add more background processes to close
 # time.sleep(1)
 # hidden_tray_button.click()
@@ -101,9 +114,8 @@ if Discord.exists():
 #     mouse.click() #Click on exit/close button
 
 
-#TODO: #5 Open Chrome window and select my user profile
-openChrome = Application(backend="uia").start('C:\Program Files\Google\Chrome\Application\chrome.exe')
-#time.sleep(1)
-mouse.move(1045, 485, True, 1)
-mouse.click()
+# openChrome = Application(backend="uia").start('C:\Program Files\Google\Chrome\Application\chrome.exe')
+# #time.sleep(1)
+# mouse.move(1045, 485, True, 1)
+# mouse.click()
 
