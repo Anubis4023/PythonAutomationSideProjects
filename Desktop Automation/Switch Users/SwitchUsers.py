@@ -94,12 +94,33 @@ if Discord.exists():
 #time.sleep(3)
 #print("Trying again")
 #hidden_tray_button.click()
+mouse.move(0, 60, False, 1)
 
 Steam = list_box_win.child_window(title="Steam")
 if Steam.exists():
     Steam.wrapper_object().right_click_input() #Open submenu
     time.sleep(1)
-    mouse.move(-220, -15, False, 0) #Move to exit/close button, need to find coordinates through simple testing and mouse.get_position
+    mouse.move(-220, -15, False, 1) #Move to exit/close button, need to find coordinates through simple testing and mouse.get_position
+    mouse.click() #Click on exit/close button
+    #These next two lines are necessary if closing the background app closes the hidden icons submenu
+    time.sleep(1)
+    hidden_tray_button.click()
+
+Overwolf = list_box_win.child_window(title="Overwolf")
+if Overwolf.exists():
+    Overwolf.wrapper_object().right_click_input() #Open submenu
+    time.sleep(1)
+    mouse.move(50, -25, False, 1) #Move to exit/close button, need to find coordinates through simple testing and mouse.get_position
+    mouse.click() #Click on exit/close button
+    #These next two lines are necessary if closing the background app closes the hidden icons submenu
+    time.sleep(1)
+    hidden_tray_button.click()
+    
+Curseforge = list_box_win.child_window(title="CurseForge")
+if Curseforge.exists():
+    Curseforge.wrapper_object().right_click_input() #Open submenu
+    time.sleep(1)
+    mouse.move(-100, -15, False, 1) #Move to exit/close button, need to find coordinates through simple testing and mouse.get_position
     mouse.click() #Click on exit/close button
 
 #FORMAT to add more background processes to close
@@ -114,8 +135,8 @@ if Steam.exists():
 #     mouse.click() #Click on exit/close button
 
 
-# openChrome = Application(backend="uia").start('C:\Program Files\Google\Chrome\Application\chrome.exe')
-# #time.sleep(1)
-# mouse.move(1045, 485, True, 1)
-# mouse.click()
+openChrome = Application(backend="uia").start('C:\Program Files\Google\Chrome\Application\chrome.exe')
+#time.sleep(1)
+mouse.move(1045, 485, True, 1)
+mouse.click()
 
