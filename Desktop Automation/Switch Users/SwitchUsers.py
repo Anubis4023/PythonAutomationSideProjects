@@ -61,7 +61,7 @@ mouse.click()
 mouse.move(966, 184, True, 1)
 mouse.click()
 #Select XIBERIA
-mouse.move(857, 368, True, 1)
+mouse.move(881, 469, True, 1)
 mouse.click()
 #Close settings window
 mouse.move(1471, 109, True, 1)
