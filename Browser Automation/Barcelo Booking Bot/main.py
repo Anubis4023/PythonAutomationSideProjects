@@ -8,5 +8,8 @@ with Booking(teardown=False) as bot:
     bot.apply_filters()
     time.sleep(2)
     bot.report(int(sys.argv[1]), int(sys.argv[2]))
+
+    #bot.land_second_page() Open Volaris
+    
     
 

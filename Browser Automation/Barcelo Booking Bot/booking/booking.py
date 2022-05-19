@@ -27,6 +27,13 @@ class Booking(webdriver.Chrome):
     def land_first_page(self):
         self.get("https://www.barcelo.com/en-us/hotels/")
 
+    def land_second_page(self): #Before adding the volaris part, merge the branch with main because it works
+        # self.get("https://www.volaris.com")
+        # self.driver.switch_to.window(self.driver.window_handles[0])
+        # self.driver.close()
+        # self.driver.switch_to.window(self.driver.window_handles[0])
+        pass
+
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if self.teardown:
             time.sleep(3)
