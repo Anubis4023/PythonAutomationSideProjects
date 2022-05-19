@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
 from booking.filter import BookingFilter
+from datetime import datetime
 
 from booking.report import BookingReport
 import os
@@ -28,15 +29,16 @@ class Booking(webdriver.Chrome):
         self.get("https://www.barcelo.com/en-us/hotels/")
 
     def land_second_page(self): #Before adding the volaris part, merge the branch with main because it works
-        # self.get("https://www.volaris.com")
-        # self.driver.switch_to.window(self.driver.window_handles[0])
-        # self.driver.close()
-        # self.driver.switch_to.window(self.driver.window_handles[0])
-        pass
+        self.get("https://www.volaris.com")
+        # time.sleep(10)
+        # self.switch_to.window(self.driver.window_handles[0])
+        # self.close()
+        # self.switch_to.window(self.driver.window_handles[0])
+        
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if self.teardown:
-            time.sleep(3)
+            #time.sleep(3)
             self.quit()    
 
     def report(self, adults, rooms):
@@ -51,7 +53,102 @@ class Booking(webdriver.Chrome):
         filter.choose_location()
         filter.filter_brand()
         pass
+    
+    #VOLARIS FUNCTIONS
+    def find_tickets(self):
+        #Open departure list to select departure location
+        departLocation_element = self.find_element(By.CSS_SELECTOR, 'a[class="btnSearch radius-6"]')
+        departLocation_element.click()
+        #Type in location to depart from
+        departLocation = self.find_element(By.ID, 'fnameOrigin')
+        time.sleep(1) #Wait for location menu to pop up to input text
+        locationText = "TIJ"
+        departLocation.send_keys(locationText)
+        #Select the target location from the list that results
+        #list_element = self.find_element(By.CSS_SELECTOR, 'ul[tabindex="1"]')
+        departList = self.find_elements(By.CSS_SELECTOR, 'li[class="row row-spec ng-star-inserted"]') #Get the list of possible locations after departure location is typed in
+        for location in departList:
+            if location.find_element(By.CSS_SELECTOR, 'div[class="col-2 right-align"]').get_attribute('innerHTML') == locationText:
+                departure = location
+                departure.click()
+                break
+
+        #Type in location to arrive to
+        arriveLocation = self.find_element(By.ID, 'fnameDestination')
+        locationText = "CUN"
+        arriveLocation.send_keys(locationText)
+        #Select the target location from the list that results
+        #list_element = self.find_element(By.CSS_SELECTOR, 'ul[tabindex="1"]')
+        arriveList = self.find_elements(By.CSS_SELECTOR, 'li[class="row row-spec ng-star-inserted"]') #Get the list of possible locations after departure location is typed in
+        for location in arriveList:
+            if location.find_element(By.CSS_SELECTOR, 'div[class="col-2 right-align"]').get_attribute('innerHTML') == locationText:
+                arrival = location
+                arrival.click()
+                break
+
+        #Select dates
+        #TODO:For #10 testing, select weekday to weekday, weekday to weekend, weekend to weekday, weekend to weekend
+        
+        firstDate = "21"
+        secondDate = "25"
+        day1 = datetime(2022, 5, int(firstDate))
+        day2 = datetime(2022, 5, int(secondDate))
+        if (day1.weekday() > 4): #Weekend
+            #print("weekend")
+            firstDate = 'td[class="weekend datecell-202205' + firstDate + ' customfare available"]'
+        else: #Weekday
+            #print("weekday")
+            firstDate = 'td[class="datecell-202205' + firstDate + ' customfare available"]'
+
+        if (day2.weekday() > 4): #Weekend
+            secondDate = 'td[class="weekend datecell-202205' + secondDate + ' returnVisible returnCustomfare available"]'
+        else: #Weekday
+            secondDate = 'td[class="datecell-202205' + secondDate + ' returnVisible returnCustomfare available"]'
+        #time.sleep(3)
+        try: #regular price
+            departDate_element = self.find_element(By.CSS_SELECTOR, firstDate) 
+        except Exception as e: #Low price, green text offer
+            #print(e)
+            firstDate = firstDate.replace("customfare", "customLowFare")
+            departDate_element = self.find_element(By.CSS_SELECTOR, firstDate)
+
+        WebDriverWait(self, 5).until(EC.element_to_be_clickable(departDate_element)) #Let calendar load
+        departDate_element.click()
+
+        try: #regular price
+            departDate_element = self.find_element(By.CSS_SELECTOR, secondDate)
+        except: #Low price, green text offer
+            firstDate = firstDate.replace("returnCustomfare", "returnCustomLowFare")
+            departDate_element = self.find_element(By.CSS_SELECTOR, secondDate)
+        #WebDriverWait(self, 5).until(EC.element_to_be_clickable(departDate_element)) #Let calendar load 
+        departDate_element.click()
+        #Finalize the calendar selection
+        done_button = self.find_element(By.CSS_SELECTOR, 'button[class="btn-calendar d-none d-md-block mat-flat-button mat-button-base mat-secondary"]')
+        done_button.click()
+
+        #Select number of adults
+        passengerList_element = self.find_element(By.CSS_SELECTOR, 'mat-form-field[aria-label="Passengers"]') #Drop down list for passengers
+        passengerList_element.click()
+        minusButton = self.find_element(By.CSS_SELECTOR, 'button[class="quantity-left-minus enabled"]')
+        while minusButton.is_enabled():
+            minusButton.click()
+
+        #print("Adults are now zero")
+        adults = 4 #replace this with user input later
+        plusButton = self.find_element(By.CSS_SELECTOR, 'button[class="quantity-right-plus enabled"]')
+        if adults > 9:
+            print("Error: Cannot buy more than 9 adult tickets at a time")
+            self.close()
+            quit()
+        for i in range(adults):
+            plusButton.click()
+        passengerList_element.click()
+        #Click the 'search' button
+        self.find_element(By.CSS_SELECTOR, 'button[class="btn btn-large col-12 search-btn mat-flat-button mat-button-base mat-primary"]').click()
         
 
-    
+
+
+
+
 
