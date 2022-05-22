@@ -1,9 +1,11 @@
 from selenium import webdriver
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.common.exceptions import NoSuchElementException
 from booking.filter import BookingFilter
 from datetime import datetime
 
@@ -22,7 +24,7 @@ class Booking(webdriver.Chrome):
         options = webdriver.ChromeOptions()
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
         super(Booking, self).__init__(options=options)
-        self.implicitly_wait(15) #Find element methods will wait x seconds
+        self.implicitly_wait(1) #Find element methods will wait x seconds
         self.maximize_window()
 
     def land_first_page(self):
@@ -104,7 +106,7 @@ class Booking(webdriver.Chrome):
             secondDate = 'td[class="weekend datecell-202205' + secondDate + ' returnVisible returnCustomfare available"]'
         else: #Weekday
             secondDate = 'td[class="datecell-202205' + secondDate + ' returnVisible returnCustomfare available"]'
-        #time.sleep(3)
+        time.sleep(3) #Giving time for calendar to load in
         try: #regular price
             departDate_element = self.find_element(By.CSS_SELECTOR, firstDate) 
         except Exception as e: #Low price, green text offer
@@ -147,6 +149,44 @@ class Booking(webdriver.Chrome):
         self.find_element(By.CSS_SELECTOR, 'button[class="btn btn-large col-12 search-btn mat-flat-button mat-button-base mat-primary"]').click()
         
 
+        #NEXT SECTION: OUTPUT THE FLIGHTS THAT ARRIVE BEFORE 2 PM: allow modifier to pick non-stop or if stops are allowed
+
+        #Add filter to arrange the flights from cheapest to highest
+        loading = True
+        while loading:
+            try:
+                filterList_element = self.find_element(By.ID, 'mat-input-9')
+                filterList_element.click()
+                loading = False
+            except:
+                print("loading")
+                loading = True
+
+        #filterList_element.click()
+        filterList = filterList_element.find_element(By.CSS_SELECTOR, 'option[value="PriceLowToHigh"]')
+        filterList.click()
+        time.sleep(1) #Time to sort the flights
+
+        #Get a list that has all the flight elements
+        flightsList_element = self.find_element(By.ID, 'Flightlists')
+        flightsList = flightsList_element.find_elements(By.CSS_SELECTOR, 'div[class="flightItem ng-star-inserted"]')
+
+        #Seperate the list to a list where stops are allowed and another where stops are not allowed
+        NoStopsList = []
+        StopsList = []
+        flight:WebElement
+        self.implicitly_wait(0)
+        for flight in flightsList:
+            try:
+                flight.find_element(By.CSS_SELECTOR, 'div[class="flightSegment stop-0"]')
+                print("There are no stops on this flight")
+                NoStopsList.append(flight)
+            except NoSuchElementException:
+                print("There are stops on this flight")
+                StopsList.append(flight)
+        self.implicitly_wait(1)
+
+        
 
 
 
