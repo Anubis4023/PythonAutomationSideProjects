@@ -10,6 +10,7 @@ from booking.filter import BookingFilter
 from datetime import datetime
 
 from booking.report import BookingReport
+from booking.flight import Flight
 import os
 import time
 
@@ -91,7 +92,7 @@ class Booking(webdriver.Chrome):
         #Select dates
         #TODO:For #10 testing, select weekday to weekday, weekday to weekend, weekend to weekday, weekend to weekend
         
-        firstDate = "21"
+        firstDate = "24"
         secondDate = "25"
         day1 = datetime(2022, 5, int(firstDate))
         day2 = datetime(2022, 5, int(secondDate))
@@ -122,7 +123,7 @@ class Booking(webdriver.Chrome):
         except: #Low price, green text offer
             firstDate = firstDate.replace("returnCustomfare", "returnCustomLowFare")
             departDate_element = self.find_element(By.CSS_SELECTOR, secondDate)
-        #WebDriverWait(self, 5).until(EC.element_to_be_clickable(departDate_element)) #Let calendar load 
+        WebDriverWait(self, 5).until(EC.element_to_be_clickable(departDate_element)) #Let calendar load 
         departDate_element.click()
         #Finalize the calendar selection
         done_button = self.find_element(By.CSS_SELECTOR, 'button[class="btn-calendar d-none d-md-block mat-flat-button mat-button-base mat-secondary"]')
@@ -178,17 +179,94 @@ class Booking(webdriver.Chrome):
         self.implicitly_wait(0)
         for flight in flightsList:
             try:
-                flight.find_element(By.CSS_SELECTOR, 'div[class="flightSegment stop-0"]')
-                print("There are no stops on this flight")
-                NoStopsList.append(flight)
+                flight.find_element(By.CSS_SELECTOR, 'div[class="flightSegment stop-0"]') #Find out if this flight has stops
+                #print("There are no stops on this flight")
+                #Get the price of the departing flight
+                price_text = flight.find_element(By.CSS_SELECTOR, 'span[class="price ng-star-inserted"]').get_attribute('innerHTML')
+                price_textList = price_text.split('<', 1)
+                price_text = price_textList[0]
+                price_text = price_text.replace('$', '')
+                price_text = price_text.strip()
+                price = float(price_text)
+
+                #Get the departure time of the flight
+                depart = flight.find_element(By.CSS_SELECTOR, 'div[class="time timeDeparture"]').get_attribute('innerHTML')
+                depart = depart.strip()
+
+                #Get the arrival time of the flight
+                arrival = flight.find_element(By.CSS_SELECTOR, 'div[class="time timeArrival"]').get_attribute('innerHTML')
+                arrival = arrival.strip()
+
+                #Get the total time it takes from departure to arrival
+                total = flight.find_element(By.CSS_SELECTOR, 'div[class="flightDuration"]').get_attribute('innerHTML')
+                total = total.strip()
+
+                NoStopsList.append(Flight(depart, arrival, total, price))
             except NoSuchElementException:
-                print("There are stops on this flight")
+                #print("There are stops on this flight")
                 StopsList.append(flight)
+        self.implicitly_wait(10)
+
+        #Select the first option for flight so that the return flight list gets opened
+        self.find_element(By.CSS_SELECTOR, 'a[class="panel-open ng-star-inserted"]').click()
+        self.find_element(By.CSS_SELECTOR, 'mat-card[class="basic mat-card ng-star-inserted"]').click()
+
+
+
+
+
+
+        #COPY PASTE CODE FROM ABOVE: selection stuff for return flight
+        #Get a list that has all the flight elements
+        # flightsList_element = self.find_element(By.ID, 'Flightlists')
+        # flightsList = flightsList_element.find_elements(By.CSS_SELECTOR, 'div[class="flightItem ng-star-inserted"]')
+
+        #Seperate the list to a list where stops are allowed and another where stops are not allowed
+        NoStopsList2 = []
+        StopsList2 = []
+        flight:WebElement
+        self.implicitly_wait(0)
+        time.sleep(5) #Give the webpage time to load
+        #Redefine flightsList
+        flightsList_element = self.find_element(By.ID, 'Flightlists')
+        flightsList = flightsList_element.find_elements(By.CSS_SELECTOR, 'div[class="flightItem ng-star-inserted"]')
+        for flight in flightsList:
+            try:
+                flight.find_element(By.CSS_SELECTOR, 'div[class="flightSegment stop-0"]') #Find out if this flight has stops
+                #print("There are no stops on this flight pt2")
+                #Get the price of the departing flight
+                price_text = flight.find_element(By.CSS_SELECTOR, 'span[class="price ng-star-inserted"]').get_attribute('innerHTML')
+                price_textList = price_text.split('<', 1)
+                price_text = price_textList[0]
+                price_text = price_text.replace('$', '')
+                price_text = price_text.strip()
+                price = float(price_text)
+
+                #Get the departure time of the flight
+                depart = flight.find_element(By.CSS_SELECTOR, 'div[class="time timeDeparture"]').get_attribute('innerHTML')
+                depart = depart.strip()
+
+                #Get the arrival time of the flight
+                arrival = flight.find_element(By.CSS_SELECTOR, 'div[class="time timeArrival"]').get_attribute('innerHTML')
+                arrival = arrival.strip()
+
+                #Get the total time it takes from departure to arrival
+                total = flight.find_element(By.CSS_SELECTOR, 'div[class="flightDuration"]').get_attribute('innerHTML')
+                total = total.strip()
+
+                NoStopsList2.append(Flight(depart, arrival, total, price))
+            except NoSuchElementException:
+                #print("There are stops on this flight")
+                StopsList2.append(flight)
         self.implicitly_wait(1)
 
-        
+        print("Possible departures to Cancun: ")
+        for flights in NoStopsList:
+            flights.printDetails()
 
-
+        print("Possible departures from Cancun: ")
+        for flights in NoStopsList2:
+            flights.printDetails()
 
 
 
