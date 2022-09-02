@@ -2,7 +2,7 @@ from booking.booking import Booking
 import time
 import sys
 
-with Booking(teardown=False) as bot:
+with Booking(teardown=True) as bot:
     bot.land_first_page()
 
     bot.apply_filters()
