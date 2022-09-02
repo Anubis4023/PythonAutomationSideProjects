@@ -2,6 +2,7 @@ from pywinauto.application import Application
 import time
 import os
 
+
 #Open Valorant by clicking on the shortcut in the taskbar
 openVal = Application(backend="uia").connect(path="explorer.exe")
 sys_tray = openVal.window(class_name="Shell_TrayWnd")

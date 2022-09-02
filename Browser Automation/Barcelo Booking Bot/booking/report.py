@@ -1,5 +1,6 @@
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import ElementNotInteractableException
@@ -10,6 +11,7 @@ from setuptools import find_packages
 import re
 
 from booking.filter import BookingFilter
+from booking.volaris import Volaris
 
 import time
 
@@ -21,25 +23,21 @@ class BookingReport:
         self.rooms = rooms
 
     def search(self): #self.hotels has a list of the hotels, go to each hotel and find the price for each person
-                      #in the cheapest room. Later update to also find a Volaris plane ticket 
-        # print(self.findPrice(self.hotels[5]))
-        # self.driver.close()
-        # self.driver.switch_to.window(self.driver.window_handles[0])
-        # self.driver.back()
-        # self.refilter()
-        #print(self.findPrice(4))
-        #print("done with the test hotel")
-
-        for hotel in range(len(self.hotels)): #for each hotel, click on booking, get redirected, get price, close tab, 
-                                  #go back to first tab, apply filters again (make it one function), 
-                                  #and continue process for every hotel using findPrice on each one
-            #print("Hotel index: ", hotel)
+        
+        dates = []
+        for hotel in range(len(self.hotels)): #Go to each hotel and retreive their name and price and plane ticket price
             listHotels = self.driver.find_element(By.CSS_SELECTOR, 'div[class="result__list result__list-JS"]').find_elements(By.CSS_SELECTOR, 'div[class="result__list-item"]')
             name = listHotels[hotel]
             print(name.find_element(By.CSS_SELECTOR, 'span[class="c-cta"]').get_attribute('innerHTML'))
-            print(self.findPrice(hotel), "\n")
+            info = self.findPrice(hotel)
+            print(info[2], "\n")
             self.refilter()
-            #self.hotels = self.driver.find_element(By.CSS_SELECTOR, 'div[class="result__list result__list-JS"]').find_elements(By.CSS_SELECTOR, 'div[class="result__list-item"]')
+
+            planeTickets = Volaris(self.driver)
+            planeTickets.land_second_page()
+            #time.sleep(10)
+            planeTickets.find_tickets(info[0], info[1])
+            planeTickets.close()
     
     def refilter(self):
         self.driver.close()
@@ -52,11 +50,12 @@ class BookingReport:
     def findPrice(self, hotel): #working with each invidiual hotel passed into hotel in the main screen
         listHotels = self.driver.find_element(By.CSS_SELECTOR, 'div[class="result__list result__list-JS"]').find_elements(By.CSS_SELECTOR, 'div[class="result__list-item"]')
         hotel = listHotels[hotel]
-        self.selectCheapestDays(hotel)
+        info = self.selectCheapestDays(hotel)
         self.selectOccupancy()
         self.signIn(False)
         self.selectRooms()
-        return self.pullPrice()
+        info.append(self.pullPrice())
+        return info
 
     def pullPrice(self):
         totalTextDraft = self.driver.find_element(By.CSS_SELECTOR, 'div[class="price-summary_price"]').find_element(By.CSS_SELECTOR, 'span').get_attribute('innerHTML')
@@ -74,20 +73,28 @@ class BookingReport:
         numRooms = self.rooms
         for i in range(numRooms):
             #Get the cheapest room
-            rooms_element = self.driver.find_element(By.CSS_SELECTOR, 'div[class="thumb-cards_products"]') #This part is not necessary to finding the cheapest room, but is necessary if I want the option to pick cheapest vs more expensive options
+            #rooms_element = self.driver.find_element(By.CSS_SELECTOR, 'div[class="thumb-cards_products"]') #This part is not necessary to finding the cheapest room, but is necessary if I want the option to pick cheapest vs more expensive options
                                                                         #rooms_element is the overall element that holds the list of rooms
-            cheapest_room = rooms_element.find_element(By.ID, 'auto-parent-card-0')
-            book_button = cheapest_room.find_element(By.CSS_SELECTOR, 'button[class="btn button_btn button_primary button_sm"]')
+            buttonLoaded = False
+            while not buttonLoaded:
+                try:
+                    cheapest_room = self.driver.find_element(By.ID, 'auto-parent-card-0') #instead of rooms_element.find
+                    buttonLoaded = True
+                except:
+                    buttonLoaded = False
+            
             #book_button is the button for picking the cheapest room
             buttonLoaded = False
             while not buttonLoaded:
                 try: #First button click fails, but second one works
+                    book_button = cheapest_room.find_element(By.CSS_SELECTOR, 'button[class="btn button_btn button_primary button_sm"]')
                     book_button.click()
                     buttonLoaded = True
                 except:
                     buttonLoaded = False
 
             #Click on the next room button or don't if it doesn't send us to the second page of additions
+            time.sleep(3)
             buttonLoaded = False
             while not buttonLoaded:
                 try:
@@ -99,10 +106,10 @@ class BookingReport:
 
                     buttonLoaded = True
                 except ElementNotInteractableException:
-                    #print("Element not interactable")
+                    print("Element not interactable")
                     buttonLoaded = True
                 except NoSuchElementException:
-                    #print("Continue/Next room button does not exist")
+                    print("Continue/Next room button does not exist")
                     buttonLoaded = True
                 except Exception as e:
                     #print("other exception caught")
@@ -216,7 +223,7 @@ class BookingReport:
 
         #Select booking dates
         time.sleep(3) #Let calendar load in
-        test = self.driver.find_element(By.ID, 'month-1-1')
+        test = self.driver.find_element(By.ID, 'month-2-1')
         dates = test.find_elements(By.CSS_SELECTOR, 
         'td[class="datepicker__month-day datepicker__month-day--visibleMonth datepicker__month-day--valid mod--loaded"], td[class="datepicker__month-day datepicker__month-day--visibleMonth datepicker__month-day--valid datepicker__month-day--today datepicker__month-day--checkin-only mod--loaded"]'
         )
@@ -254,6 +261,8 @@ class BookingReport:
         print("Picking days: ", dayStart, " and ", dayEnd)
         dates[cheapest[0]].click() #start day
         dates[cheapest[1]].click() #end day
+
+        return [dayStart, dayEnd]
 
 
     def findCheapestDays(self, prices): #Find the cheapest three days and return the start day and end day index
