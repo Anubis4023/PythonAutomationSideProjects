@@ -39,14 +39,14 @@ def add_pay():
     data = log.readlines()
     #Update the log with date payed and how much is left owed
     owed = str(int(data[0]) - int(pay))
-    data.append('$' + pay + " paid. Old total: " + data[0].strip() + ". New total: " + owed) #Update log with a log of the payment
+    data.append('$' + pay + " paid. Old total: " + data[0].strip() + ". New total: " + owed + "\n") #Update log with a log of the payment
     data[0] = owed + "\n" #Update the money still left owed
     log.close()
     #Update the total amount at the top of the log
     log = open("log.txt", "w")
     log.writelines(data)
     log.close()
-    print('$' + pay + "has been paid")
+    print('$' + pay + " has been paid")
 
 option = int(input("Option 1: Clock hours\nOption 2: Add payment\n"))
 if option == 1:
