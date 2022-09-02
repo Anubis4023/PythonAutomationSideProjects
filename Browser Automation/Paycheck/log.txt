@@ -1,4 +1,9 @@
-196
-3/3/2022: 6 worked
-3/4/2022: 6 worked
-3/5/2022: 1 worked
+35
+3/3/2022: 6 hours worked
+3/4/2022: 5 hours worked
+3/5/2022: 1 hours worked
+2/6/2022: 1 hours worked
+3/7/2022: 1 hours worked
+3/8/2022: 6 hours worked
+3/09/2022: 15 hours worked
+$200 paid. Old total: 235. New total: 35
