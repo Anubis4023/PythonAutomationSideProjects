@@ -17,7 +17,7 @@ import time
 #TODO: #8 make a filter class with filter functions and replace them in booking.py and refilter when a price for a hotel is retrieved in report.py
 
 class Booking(webdriver.Chrome):
-    def __init__(self, driver_path=r";C:\Users\pacow\Desktop\Selenium Drivers", teardown=False):
+    def __init__(self, driver_path=r";C:\Users\pacow\Onedrive\Desktop\Selenium Drivers", teardown=False):
         self.driver_path = driver_path
         self.teardown = teardown
         os.environ['PATH'] += self.driver_path
