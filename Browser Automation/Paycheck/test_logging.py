@@ -2,11 +2,18 @@ import unittest
 import logging
 
 class TestLogging(unittest.TestCase):
+    def setUp(self):
+        log = open("test.txt", "r")
+        self.oldData = log.readlines()
+        log.close()
+
+    def tearDown(self):
+        log = open("test.txt", "w")
+        log.writelines(self.oldData)
+        log.close()
+
     def test_Hours(self):
         hourlyPay = 15
-        log = open("test.txt", "r")
-        oldData = log.readlines()
-        log.close()
 
         logging.clock_hours("3/5/2022", "6", hourlyPay, "test.txt")
 
@@ -36,16 +43,7 @@ class TestLogging(unittest.TestCase):
         self.assertEqual(logTwo, "3/7/2022: 2 hours worked\n")
         self.assertEqual(logThree, "3/10/2022: 4 hours worked\n")
 
-        log = open("test.txt", "w")
-        log.writelines(oldData)
-        #print(oldData)
-        log.close()
-
     def test_Pay(self):
-        log = open("test.txt", "r")
-        oldData = log.readlines()
-        log.close()
-
         logging.add_pay("34", "test.txt")
         
         log = open("test.txt", "r")
@@ -57,15 +55,11 @@ class TestLogging(unittest.TestCase):
         
         i = 1
         for logInstance in data[1:-1]:
-            self.assertEqual(logInstance, oldData[i])
+            self.assertEqual(logInstance, self.oldData[i])
             i += 1
 
         lastLog = data[-1]
         self.assertEqual(lastLog, "$34 paid. Old total: 54. New total: 20\n")
-
-        log = open("test.txt", "w")
-        log.writelines(oldData)
-        log.close()
         
 
 if __name__ == '__main__':
