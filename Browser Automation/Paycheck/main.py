@@ -1,24 +1,32 @@
 import logging
 from datetime import datetime
+from speech import speechInput
 
 
 option = int(input("Option 1: Clock hours\nOption 2: Add payment\n"))
 if option == 1:
     hourlyPay = 15
     #Get the date for the day worked
-    format = "%m/%d/%Y"
-    while True:
-        try:
-            date = input("Enter the date (mm/dd): ")
-            date += "/2022"
-            datetime.strptime(date, format)
-            #print("The string is a date with format " + format)
-            break
-        except ValueError:
-            print("The date does not have the correct format or is not a valid date")
-    
-    hours = input("Enter number of hours worked: ")
-    logging.clock_hours(date, hours, hourlyPay, "log.txt")
+    option = int(input("Option 1: Manual input\nOption 2: Speech input\n"))
+    date = ""
+
+    if option == 1:
+        format = "%m/%d/%Y"
+        while True:
+            try:
+                date = input("Enter the date (mm/dd): ")
+                date += "/2022"
+                datetime.strptime(date, format)
+                #print("The string is a date with format " + format)
+                break
+            except ValueError:
+                print("The date does not have the correct format or is not a valid date")
+        
+        hours = input("Enter number of hours worked: ")
+        logging.clock_hours(date, hours, hourlyPay, "log.txt")
+    elif option == 2:
+        speechInput()
+
 elif option == 2:
     pay = input("How much has been paid?\n")
     logging.add_pay(pay, "log.txt")
