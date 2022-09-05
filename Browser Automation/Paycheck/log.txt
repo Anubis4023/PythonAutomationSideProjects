@@ -1,4 +1,4 @@
-915
+826
 08/02/2022: 3 hours worked
 08/05/2022: 3 hours worked
 08/06/2022: 7 hours worked
@@ -11,3 +11,6 @@
 08/29/2022: 6 hours worked
 08/30/2022: 6 hours worked
 08/31/2022: 6 hours worked
+$4 paid. Old total: 915. New total: 911
+$100 paid. Old total: 911. New total: 811
+09/2/2022: 1 hours worked

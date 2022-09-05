@@ -3,10 +3,6 @@ from datetime import datetime
 import speech_recognition as sr
 
 
-
-    
-#TODO: #13 try and catch indexError exception for speech input to try hearing the date again instead of crashing. Example: saying 30, followed by 6 may be interpreted as 6. Maybe change input to format: day month Hours worked x
-
 option = int(input("Option 1: Clock hours\nOption 2: Add payment\n"))
 if option == 1:
     hourlyPay = 15
@@ -27,6 +23,7 @@ if option == 1:
                 print("The date does not have the correct format or is not a valid date")
         
         hours = input("Enter number of hours worked: ")
+        logging.clock_hours(date, hours, hourlyPay, "log.txt")
     elif option == 2:
         logAgain = True
         while logAgain:
@@ -67,7 +64,7 @@ if option == 1:
 
             with sr.Microphone() as source:
                 print("Continue logging hours?\n")
-                audio_data = r.record(source, duration=3)
+                audio_data = r.record(source, duration=2)
                 text = r.recognize_google(audio_data)
                 if text == "yes":
                     logAgain = True
