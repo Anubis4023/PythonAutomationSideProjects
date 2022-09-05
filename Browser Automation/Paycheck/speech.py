@@ -12,13 +12,18 @@ def speechInput (fileName = "NA", logFile = "log.txt"): #include an optional par
             correct = False
             while not correct:
                 with sr.Microphone() as source:
-                    print("Starting speech recording for date")
-                    audio_data = r.record(source, duration=5)
-                    print("Recognizing date")
-                    #speech to text
-                    text = r.recognize_google(audio_data)
-                    print("Speech is:", text) #format of date heard is: mm:dd or mm dd or mmdd
-                    
+                    while True:
+                        try:
+                            print("Starting speech recording for date")
+                            audio_data = r.record(source, duration=5)
+                            print("Recognizing date")
+                            #speech to text
+                            text = r.recognize_google(audio_data)
+                            print("Speech is:", text) #format of date heard is: mm:dd or mm dd or mmdd
+                            break
+                        except Exception:
+                            print("Exception raised, error with speech, try again")
+
                     if (len(text) == 5): #mm:dd or mm dd recognized
                         month = text[0] + text[1]
                         day = text[3] + text[4]
@@ -27,10 +32,15 @@ def speechInput (fileName = "NA", logFile = "log.txt"): #include an optional par
                         day = text[2] + text[3]
                     date = month + "/" + day + "/2022"
 
-                    print("Starting speech recording for hours worked")
-                    audio_data = r.record(source, duration=5)
-                    print("Recognizing hours")
-                    hours = r.recognize_google(audio_data)
+                    while True:
+                        try:
+                            print("Starting speech recording for hours worked")
+                            audio_data = r.record(source, duration=5)
+                            print("Recognizing hours")
+                            hours = r.recognize_google(audio_data)
+                            break
+                        except Exception:
+                            print("Exception raised, error with speech, try again")
 
                     print("Log recognized:", date, "and", hours, "hours worked")
                     print("Is this correct? Y or N\n")
@@ -44,9 +54,15 @@ def speechInput (fileName = "NA", logFile = "log.txt"): #include an optional par
             logging.clock_hours(date, hours, hourlyPay, "logFile")
 
             with sr.Microphone() as source:
-                print("Continue logging hours?\n")
-                audio_data = r.record(source, duration=2)
-                text = r.recognize_google(audio_data)
+                while True:
+                    try:
+                        print("Continue logging hours?\n")
+                        audio_data = r.record(source, duration=2)
+                        text = r.recognize_google(audio_data)
+                        break
+                    except Exception: #If nothing is said, then treat it like user is done logging hours
+                        return
+
                 if text == "yes":
                     logAgain = True
                 elif text == "no":
