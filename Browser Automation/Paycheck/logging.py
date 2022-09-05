@@ -1,4 +1,4 @@
-#TODO: #14 add unit testing for speech to text using audio filess
+
 def clock_hours(date, hours, hourlyPay, fileName):
     log = open(fileName, "r")
 
