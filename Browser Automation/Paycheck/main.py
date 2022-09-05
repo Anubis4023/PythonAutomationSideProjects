@@ -34,20 +34,26 @@ if option == 1:
             correct = False
             while not correct:
                 with sr.Microphone() as source:
-                    print("Starting speech recording")
+                    print("Starting speech recording for date")
                     audio_data = r.record(source, duration=5)
-                    print("Recognizing speech")
+                    print("Recognizing date")
                     #speech to text
                     text = r.recognize_google(audio_data)
-                    print("Speech is:", text)
-
-                    month = text[0] + text[1]
-                    day = text[2] + text[3]
-                    hours = text[4]
-                    if hours == " " and len(text) == 6:
-                        hours = text[5]
-
+                    print("Speech is:", text) #format of date heard is: mm:dd or mm dd or mmdd
+                    
+                    if (len(text) == 5): #mm:dd or mm dd recognized
+                        month = text[0] + text[1]
+                        day = text[3] + text[4]
+                    elif len(text) == 4: #mmdd recognized
+                        month = text[0] + text[1]
+                        day = text[2] + text[3]
                     date = month + "/" + day + "/2022"
+
+                    print("Starting speech recording for hours worked")
+                    audio_data = r.record(source, duration=5)
+                    print("Recognizing hours")
+                    hours = r.recognize_google(audio_data)
+
                     print("Log recognized:", date, "and", hours, "hours worked")
                     print("Is this correct? Y or N\n")
                     audio_data = r.record(source, duration=5)
