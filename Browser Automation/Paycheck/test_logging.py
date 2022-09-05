@@ -1,5 +1,6 @@
 import unittest
 import logging
+from speech import speechInput
 
 class TestLogging(unittest.TestCase):
     def setUp(self):
@@ -61,6 +62,26 @@ class TestLogging(unittest.TestCase):
         lastLog = data[-1]
         self.assertEqual(lastLog, "$34 paid. Old total: 54. New total: 20\n")
         
+    def test_Speech(self):
+        speechInput("0305.wav", "test.txt")
+        speechInput("0421.wav", "test.txt")
+        speechInput("1203.wav", "test.txt")
+        speechInput("1212.wav", "test.txt")
+
+        log = open("test.txt", "r")
+        data = log.readlines()
+        updatedPay = int(data[0])
+        logOne = data[-4]
+        logTwo = data[-3]
+        logThree = data[-2]
+        logFour = data[-1]
+        log.close()
+
+        self.assertEqual(updatedPay, 414)
+        self.assertEqual(logOne, "03/05/2022: 6 hours worked\n")
+        self.assertEqual(logTwo, "04/21/2022: 6 hours worked\n")
+        self.assertEqual(logThree, "12/03/2022: 6 hours worked\n")
+        self.assertEqual(logFour, "12/12/2022: 6 hours worked\n")
 
 if __name__ == '__main__':
     unittest.main()
